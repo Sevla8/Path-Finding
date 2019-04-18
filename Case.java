@@ -1,16 +1,17 @@
+import java.awt.Point;
+
 public class Case {
-	public Coord coord;
-	public int cout;
+	public Point point;
+	public int cost;
 	public int estimation;
 
-	public Case(Coord coord, int cout, int estimation) {
-		this.cout = cout;
+	public Case(Point point, int cost, int estimation) {
+		this.cost = cost;
 		this.estimation = estimation;
-		this.coord.x = coord.x;
-		this.coord.y = coord.y;
+		this.point = point;
 	}
 
-	public int heuristique(Coord c, Coord g) {
-		return c.x - g.x + (c.y - g.y);
+	public int heuristique(Point c, Point g) {
+		return (int)c.getX() - (int)g.getX() + ((int)c.getY() - (int)g.getY());
 	}
 }

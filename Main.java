@@ -1,25 +1,15 @@
 import javax.swing.JFrame;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Point;
 
 public class Main {
 	public static void main(String[] args) {
-		JFrame frame = new JFrame();
-		frame.setSize(1000, 1000);
-		frame.setLocation(0, 25);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setTitle("A*");
-		frame.setLayout(null);
 
+		ControlPanel controlPanel = new ControlPanel("barrier", "path", new Point(0, 0), new Dimension(700, 100), Color.BLUE);
+		MainPanel mainPanel = new MainPanel(500, 10, Color.GREEN, controlPanel);
 
-		ControlPanel controlPanel = new ControlPanel("obstacle", "chemin");
-
-		MainPanel mainPanel = new MainPanel(50, 70, controlPanel);
-		
-		controlPanel.setOpaque(true);
-		mainPanel.setOpaque(true);
-
-		frame.add(controlPanel);
-		frame.add(mainPanel);
-
-		frame.setVisible(true);
+		MyFrame frame = new MyFrame(mainPanel, controlPanel);
+		frame.run();
 	}
 }

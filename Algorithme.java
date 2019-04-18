@@ -1,17 +1,18 @@
 import java.util.PriorityQueue;
 import java.util.HashMap;
+import java.awt.Point;
 
 public class Algorithme {
 	public Case[][] tab;
 	public PriorityQueue<Case> openList;
 	public boolean[][] visited;
-	public HashMap<Coord, Coord> mapPath;
+	public HashMap<Point, Point> mapPath;
 
 	public Algorithme(int n, int m) {
 		this.tab = new Case[n][m];
 		for (int i = 0; i < n; i += 1) {
 			for (int j = 0; j < m; j += 1) {
-					this.tab[i][j] = new Case(new Coord(i, j), 999999999, 999999999);
+					this.tab[i][j] = new Case(new Point(i, j), 999999999, 999999999);
 			}
 		}
 		this.openList = new PriorityQueue<Case>();
@@ -21,16 +22,18 @@ public class Algorithme {
 				cell = false;
 			}
 		}
-		this.mapPath = new HashMap<Coord, Coord>();
+		this.mapPath = new HashMap<Point, Point>();
 	}
 
-	public void algo(Coord start, Coord end) {
+	public void algo(Point start, Point end) {
 		//	step 1
-		this.tab[start.x][start.y].cout = 0;
-		this.tab[start.x][start.y].estimation = this.tab[start.x][start.y].cout + this.tab[start.x][start.y].heuristique(start, end);
-		this.openList.add(this.tab[start.x][start.y]);
+		int x = (int)start.getX();
+		int y = (int)start.getY();
+		this.tab[x][y].cost = 0;
+		this.tab[x][y].estimation = this.tab[x][y].cost + this.tab[x][y].heuristique(start, end);
+		this.openList.add(this.tab[x][y]);
 
 		//	step 2
-		while ()
+		// while ()
 	}
 }
