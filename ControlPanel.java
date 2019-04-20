@@ -3,13 +3,12 @@ import javax.swing.JRadioButton;
 import javax.swing.ButtonGroup;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Point;
 
 public class ControlPanel extends JPanel {
 	public JRadioButton button1;
 	public JRadioButton button2;
 
-	public ControlPanel(String alpha, String beta, Point location, Dimension size, Color background) {
+	public ControlPanel(String alpha, String beta, Coord location, Dimension size, Color background) {
 		ButtonGroup group = new ButtonGroup();
 
 		this.button1 = new JRadioButton(alpha);
@@ -23,6 +22,6 @@ public class ControlPanel extends JPanel {
 		
 		this.setBackground(background);
 		this.setSize((int)size.getWidth(), (int)size.getHeight());
-		this.setLocation((int)location.getX(), (int)location.getY());
+		this.setLocation(location.x, location.y);
 	}
 }
