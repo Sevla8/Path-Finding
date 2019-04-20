@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class Coord {
 	public int x;
 	public int y;
@@ -34,6 +36,15 @@ public class Coord {
 		if (this.x == coord.x && this.y - 1 == coord.y)
 			return true;
 		return false;
+	}
+
+	public ArrayList<Coord> getNeighbours() {
+		ArrayList<Coord> neighbours = new ArrayList<Coord>();
+		neighbours.add(new Coord(this.x + 1, this.y));
+		neighbours.add(new Coord(this.x - 1, this.y));
+		neighbours.add(new Coord(this.x, this.y + 1));
+		neighbours.add(new Coord(this.x, this.y - 1));
+		return neighbours;
 	}
 
 	public String toString() {
