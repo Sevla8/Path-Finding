@@ -41,6 +41,103 @@ public class MainPanel extends JPanel implements MouseListener, MouseMotionListe
 		this.addMouseMotionListener(this);
 	}
 
+	public ArrayList<Coord> algorithm(Coord start, Coord end) {
+		//	init
+		int n = this.tab.length;
+		int m = this.tab[0].length;
+
+		Case[][] caseTab = new Case[n][m];
+		for (int i = 0; i < n; i += 1) {
+			for (int j = 0; j < m; j += 1) {
+					caseTab[i][j] = new Case(new Coord(i, j), 999999999, 999999999);
+			}
+		}
+
+//	1
+		PriorityQueue<Case> openList = new PriorityQueue<Case>(new CaseComparator());
+//	2
+		// Comparator<Case> myInterface = new Comparator<Case>() {
+		// 	public int compare(Case c1, Case c2) {
+		// 		if (c1.estimation < c2.estimation)
+		// 			return -1;
+		// 		else if (c1.estimation > c2.estimation)
+		// 			return 1;
+		// 		else 
+		// 			return 0;
+		// 	}
+		// };
+		// PriorityQueue<Case> openList = new PriorityQueue<Case>(myInterface);
+//	3
+		// Comparator<Case> myInterface = (Case c1, Case c2) -> {
+		// 	if (c1.estimation < c2.estimation)
+		// 		return -1;
+		// 	else if (c1.estimation > c2.estimation)
+		// 		return 1;
+		// 	else 
+		// 		return 0;
+		// };
+		// PriorityQueue<Case> openList = new PriorityQueue<Case>(myInterface);
+
+		boolean[][] visited = new boolean[n][m];
+		for (boolean[] row : visited) {
+			for (boolean cell : row) {
+				cell = false;
+			}
+		}
+
+		HashMap<Coord, Coord> mapPath = new HashMap<Coord, Coord>();
+
+		//	step 1
+		caseTab[start.x][start.y].cost = 0;
+		caseTab[start.x][start.y].refineEstimation(end);
+
+		openList.add(caseTab[start.x][start.y]);
+
+		//	step 2
+		while (!openList.isEmpty()) {
+			//	(a)	
+			Case c = openList.poll();
+			//	(b)
+			if (c != null && c.coord.equals(end)) {
+				ArrayList<Coord> result = new ArrayList<Coord>();
+				result.add(end);
+				Coord tmp = mapPath.get(end);
+				while (tmp != null) {
+					result.add(tmp);
+					tmp = mapPath.get(tmp);
+				}
+				return result;
+			}
+			//	(c)
+			else 
+				visited[c.coord.x][c.coord.y] = true;
+			//	(d)
+			for (Case[] row : caseTab) {
+				for (Case a : row) {
+					if (a.coord.isNeighbour(c.coord) && this.tab[a.coord.x][a.coord.y] != 1 && !visited[a.coord.x][a.coord.y]) {
+						if (!openList.contains(a)) {
+							a.cost = c.cost + 1;
+							a.refineEstimation(end);
+							openList.add(a);
+							mapPath.put(a.coord, c.coord);
+						}
+						else {
+							if (c.cost + 1 < a.cost) {
+								a.cost = c.cost + 1;
+								a.refineEstimation(end);
+								mapPath.put(a.coord, c.coord);
+							}
+						}
+					}
+				}
+			}
+
+		}
+
+		// step 3
+		return null;
+	}
+
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		g.setColor(Color.BLACK);
@@ -141,79 +238,5 @@ public class MainPanel extends JPanel implements MouseListener, MouseMotionListe
 		}
 
 		return string;
-	}
-
-	public ArrayList<Coord> algorithm(Coord start, Coord end) {
-		//	init
-		int n = this.tab.length;
-		int m = this.tab[0].length;
-
-		Case[][] caseTab = new Case[n][m];
-		for (int i = 0; i < n; i += 1) {
-			for (int j = 0; j < m; j += 1) {
-					caseTab[i][j] = new Case(new Coord(i, j), 999999999, 999999999);
-			}
-		}
-
-		PriorityQueue<Case> openList = new PriorityQueue<Case>(new CaseComparator());
-		
-		boolean[][] visited = new boolean[n][m];
-		for (boolean[] row : visited) {
-			for (boolean cell : row) {
-				cell = false;
-			}
-		}
-
-		HashMap<Coord, Coord> mapPath = new HashMap<Coord, Coord>();
-
-		//	step 1
-		caseTab[start.x][start.y].cost = 0;
-		caseTab[start.x][start.y].refineEstimation(end);
-
-		openList.add(caseTab[start.x][start.y]);
-
-		//	step 2
-		while (!openList.isEmpty()) {
-			//	(a)	
-			Case c = openList.poll();
-			//	(b)
-			if (c != null && c.coord.equals(end)) {
-				ArrayList<Coord> result = new ArrayList<Coord>();
-				result.add(end);
-				Coord tmp = mapPath.get(end);
-				while (tmp != null) {
-					result.add(tmp);
-					tmp = mapPath.get(tmp);
-				}
-				return result;
-			}
-			//	(c)
-			else 
-				visited[c.coord.x][c.coord.y] = true;
-			//	(d)
-			for (Case[] row : caseTab) {
-				for (Case a : row) {
-					if (a.coord.isNeighbour(c.coord) && this.tab[a.coord.x][a.coord.y] != 1 && !visited[a.coord.x][a.coord.y]) {
-						if (!openList.contains(a)) {
-							a.cost = c.cost + 1;
-							a.refineEstimation(end);
-							openList.add(a);
-							mapPath.put(a.coord, c.coord);
-						}
-						else {
-							if (c.cost + 1 < a.cost) {
-								a.cost = c.cost + 1;
-								a.refineEstimation(end);
-								mapPath.put(a.coord, c.coord);
-							}
-						}
-					}
-				}
-			}
-
-		}
-
-		// step 3
-		return null;
 	}
 }
