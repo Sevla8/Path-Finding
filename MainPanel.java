@@ -22,10 +22,9 @@ public class MainPanel extends JPanel implements MouseListener, MouseMotionListe
 		int m = height/large;
 
 		this.tab = new int[n][m];
-		for (int[] row : this.tab) {
-			for (int cell : row) {
-					cell = 0;
-			}
+		for (int i = 0; i < n; i += 1) {
+			for (int j = 0; j < m; j += 1)
+				this.tab[i][j] = 0;
 		}
 		this.large = large;
 		this.startingCase = null;
@@ -79,10 +78,9 @@ public class MainPanel extends JPanel implements MouseListener, MouseMotionListe
 		// PriorityQueue<Case> openList = new PriorityQueue<Case>(myInterface);
 
 		boolean[][] visited = new boolean[n][m];
-		for (boolean[] row : visited) {
-			for (boolean cell : row) {
-				cell = false;
-			}
+		for (int i = 0; i < n; i += 1) {
+			for (int j = 0; j < m; j += 1)
+				visited[i][j] = false;
 		}
 
 		HashMap<Coord, Coord> mapPath = new HashMap<Coord, Coord>();
@@ -96,9 +94,9 @@ public class MainPanel extends JPanel implements MouseListener, MouseMotionListe
 		//	step 2
 		while (!openList.isEmpty()) {
 			//	(a)	
-			Case c = openList.poll();
+			Case c = openList.remove();
 			//	(b)
-			if (c != null && c.coord.equals(end)) {
+			if (c.coord.equals(end)) {
 				ArrayList<Coord> result = new ArrayList<Coord>();
 				result.add(end);
 				Coord tmp = mapPath.get(end);
@@ -114,7 +112,9 @@ public class MainPanel extends JPanel implements MouseListener, MouseMotionListe
 			//	(d)
 			for (Case[] row : caseTab) {
 				for (Case a : row) {
-					if (a.coord.isNeighbour(c.coord) && this.tab[a.coord.x][a.coord.y] != 1 && !visited[a.coord.x][a.coord.y]) {
+					if (a.coord.isNeighbour(c.coord) && 
+						this.tab[a.coord.x][a.coord.y] != 1 && 
+						!visited[a.coord.x][a.coord.y]) {
 						if (!openList.contains(a)) {
 							a.cost = c.cost + 1;
 							a.refineEstimation(end);
@@ -123,8 +123,10 @@ public class MainPanel extends JPanel implements MouseListener, MouseMotionListe
 						}
 						else {
 							if (c.cost + 1 < a.cost) {
+								openList.remove(a);
 								a.cost = c.cost + 1;
 								a.refineEstimation(end);
+								openList.add(a);
 								mapPath.put(a.coord, c.coord);
 							}
 						}
