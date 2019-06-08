@@ -1,2 +1,2 @@
-# A-Star
+# Path-Finding
 A* algorithm
