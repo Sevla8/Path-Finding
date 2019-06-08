@@ -25,6 +25,10 @@ public class Case {
 		if (this.getClass() != object.getClass())
 			return false;
 		Case c = (Case) object;
+		if (this.coord == null && c.coord == null)
+			return true;
+		if (this.coord == null || c.coord == null)
+			return false;
 		if (!this.coord.equals(c.coord))
 			return false;
 		return true;
@@ -32,7 +36,8 @@ public class Case {
 
 	public String toString() {
 		String string = new String("");
-		string += this.coord.toString();
+		if (this.coord != null)
+			string += this.coord.toString();
 		string += "cost : \n";
 		string += this.cost + "\n";
 		string += "estimation : \n";
